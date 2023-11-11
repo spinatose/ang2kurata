@@ -1,12 +1,32 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { Product } from "./product";
 
 @Component({
   selector: 'pm-products',
-  templateUrl: './product-list.component.html'
+  templateUrl: './product-list.component.html',
+  styleUrls: ['./product-list.component.css']
 })
-export class ProductListComponent {
+export class ProductListComponent implements OnInit {
+  ngOnInit(): void {
+    this.listFilter = "cart";
+  }
+
   pageTitle: string = "ProcDuct List";
-  products: any[] = [
+  imgWidth: number = 50;
+  imgMargin: number = 2;
+  showImage = false;
+
+  private _listFilter: string = '';
+
+  get listFilter(): string {
+    return this._listFilter;
+  }
+  set listFilter(value: string) {
+    console.log(`Setting listFilter to [${value}]`)
+    this._listFilter = value;
+  }
+
+  products: Product[] = [
     {
       "productId": 2,
       "productName": "Garden Cart",
@@ -28,4 +48,12 @@ export class ProductListComponent {
       "imageUrl": "assets/images/hammer.png"
     }
   ];
+
+  filterProducts(): Product[] {
+    return this.products.filter((p: Product) => p.productName.toLowerCase().includes(this.listFilter.toLowerCase()));
+  }
+
+  toggleImage(): void {
+    this.showImage = !this.showImage;
+  }
 }
